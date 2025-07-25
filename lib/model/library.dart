@@ -24,6 +24,15 @@ class Library {
     return {'id': id, 'name': name, 'location': location};
   }
 
+  Library copyWith({int? id, String? name, String? location, List<NumberOfBook?>? numberOfBook}) {
+    return Library(
+      id: id ?? this.id, // Eğer yeni bir ID verilmezse, mevcut ID'yi kullan
+      name: name ?? this.name,
+      location: location ?? this.location,
+      numberOfBook: numberOfBook ?? this.numberOfBook, // Eğer yeni bir liste verilmezse, mevcut listeyi kullan
+    );
+  }
+
   static final createTable = """
     CREATE TABLE libraries (
       id INTEGER PRIMARY KEY AUTOINCREMENT,

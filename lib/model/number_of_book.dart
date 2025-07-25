@@ -1,29 +1,41 @@
-// NumberOfBook.dart
+// number_of_book.dart
 import 'book.dart';
 
 class NumberOfBook {
   final int? id;
   int number;
-  final Book book; // Bu Book nesnesi, veri tabanından çekilirken dışarıdan atanacak
+  final Book book;
+  final int? libraryId; // Yeni eklendi!
 
-  NumberOfBook({this.id, this.number = 0, required this.book});
+  NumberOfBook({
+    this.id,
+    this.number = 0,
+    required this.book,
+    this.libraryId,
+  }); // Constructor güncellendi
 
-  // Bu fromJson metodu, 'numberOfBooks' ve 'books' tablolarının JOIN edilmesiyle
-  // oluşan TEK BİR HARİTADAN veri almak için tasarlanmıştır.
-  // Bu harita hem numberOfBook hem de book bilgilerini içerecektir.
+  NumberOfBook copyWith({int? id, int? number, Book? book, int? libraryId}) {
+    return NumberOfBook(
+      id: id ?? this.id,
+      number: number ?? this.number,
+      book: book ?? this.book,
+      libraryId: libraryId ?? this.libraryId,
+    );
+  }
+
   factory NumberOfBook.fromJsonWithBook(Map<String, dynamic> json) {
-    // Kitap bilgileri doğrudan haritada bulunuyor
     final Book actualBook = Book(
-      id: json['book_id'] as int?, // JOIN ile gelen book ID'si
-      name: json['book_name'] as String, // JOIN ile gelen book adı
-      writer: json['book_writer'] as String, // JOIN ile gelen book yazarı
-      numberOfPages: json['book_numberOfPages'] as int?, // JOIN ile gelen sayfa sayısı
+      id: json['book_id'] as int?,
+      name: json['book_name'] as String,
+      writer: json['book_writer'] as String,
+      numberOfPages: json['book_numberOfPages'] as int?,
     );
 
     return NumberOfBook(
-      id: json['numberOfBook_id'] as int?, // JOIN ile gelen numberOfBook ID'si
-      number: json['numberOfBook_number'] as int? ?? 0, // JOIN ile gelen sayı adedi
+      id: json['numberOfBook_id'] as int?,
+      number: json['numberOfBook_number'] as int? ?? 0,
       book: actualBook,
+      libraryId: json['libraryId'] as int?,
     );
   }
 
@@ -31,9 +43,8 @@ class NumberOfBook {
     return {
       'id': id,
       'number': number,
-      'bookId': book.id, // Sadece Book'un ID'sini kaydet
-      // libraryId, bu nesnenin bir parçası olarak kaydedilmez,
-      // NumberOfBook'un Library ile ilişkisini kurarken dışarıdan verilir.
+      'bookId': book.id,
+      'libraryId': libraryId, // toJson'a libraryId eklendi!
     };
   }
 
@@ -43,7 +54,7 @@ class NumberOfBook {
       number INTEGER,
       bookId INTEGER,
       libraryId INTEGER,
-      FOREIGN KEY (bookId) REFERENCES books (id),
-      FOREIGN KEY (libraryId) REFERENCES libraries (id))
+      FOREIGN KEY (bookId) REFERENCES books (id) ON DELETE CASCADE,
+      FOREIGN KEY (libraryId) REFERENCES libraries (id) ON DELETE CASCADE)
   """;
 }

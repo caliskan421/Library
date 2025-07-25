@@ -15,7 +15,6 @@ class WhereIsLibraryApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "Where is Library",
       theme: lightTheme,
-      routerDelegate: router.routerDelegate,
       routerConfig: router,
     );
   }
