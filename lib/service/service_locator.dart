@@ -7,6 +7,7 @@ import 'package:where_is_library/core/preferences/secure_storage_manager.dart';
 import 'package:where_is_library/core/preferences/shared_preferences_manager.dart';
 import 'package:where_is_library/core/repository/book_repository.dart';
 import 'package:where_is_library/core/repository/library_repository.dart';
+import 'package:where_is_library/core/repository/library_location_repository.dart';
 import 'package:where_is_library/core/repository/number_of_book_repository.dart';
 import 'package:where_is_library/core/repository/writer_repository.dart';
 
@@ -46,6 +47,11 @@ Future<void> serviceLocator() async {
   GetIt.I.registerLazySingletonAsync<LibraryRepository>(() async {
     final database = await GetIt.I.getAsync<Database>();
     return LibraryRepository(database);
+  });
+
+  GetIt.I.registerLazySingletonAsync<LibraryLocationRepository>(() async {
+    final database = await GetIt.I.getAsync<Database>();
+    return LibraryLocationRepository(database);
   });
 
   GetIt.I.registerLazySingletonAsync<NumberOfBookRepository>(() async {
