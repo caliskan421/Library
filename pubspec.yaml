@@ -23,6 +23,9 @@ dependencies:
   mobx_codegen: ^2.7.1
   path: ^1.9.1
   formz: ^0.8.0
+  flutter_dotenv: ^5.2.1
+  google_maps_flutter: ^2.12.3
+  location: ^8.0.1
 
 
 dev_dependencies:

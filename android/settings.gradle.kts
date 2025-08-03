@@ -22,4 +22,9 @@ plugins {
     id("org.jetbrains.kotlin.android") version "2.1.0" apply false
 }
 
+// en alta ekle
+secrets {
+    defaultPropertiesFileName = "security.env"   // proje kökünde, .gitignore’da
+}
+
 include(":app")
