@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
+import 'package:where_is_library/model/library_location.dart';
+import 'package:where_is_library/view/map/model/map_extra_model.dart';
 import 'package:where_is_library/view/router.dart';
 
 import '../../model/book.dart';
@@ -42,9 +44,21 @@ class _HomeViewState extends State<HomeView>
       appBar: AppBar(
         title: const Text('Library Test System'),
         actions: [
+          IconButton(onPressed: () {}, icon: Icon(Icons.search)),
           IconButton(
             onPressed: () {
-              context.pushNamed(RouteNames.map.name);
+              context.pushNamed(
+                RouteNames.map.name,
+                extra: MapExtraModel(
+                  libLocs: [
+                    LibraryLocation(
+                      title: "SDÜ",
+                      lat: 37.83203036876697,
+                      long: 30.53194258143802,
+                    ),
+                  ],
+                ),
+              );
             },
             icon: Icon(Icons.location_on),
           ),
@@ -519,7 +533,7 @@ class _HomeViewState extends State<HomeView>
                                                       ),
                                                       const SizedBox(width: 4),
                                                       Text(
-                                                        'Enlem: ${library.location!.lat}, Boylam: ${library.location!.long}',
+                                                        'Enlem: ${library.location!.lat.toStringAsFixed(3)}, Boylam: ${library.location!.long.toStringAsFixed(3)}',
                                                         style: TextStyle(
                                                           color: Colors
                                                               .grey

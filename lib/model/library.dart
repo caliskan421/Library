@@ -6,16 +6,9 @@ class Library {
   final String name;
   final int locationId; // LibraryLocation tablosuna referans
   final LibraryLocation? location; // İlişkilendirilmiş location nesnesi
-  final List<NumberOfBook?>
-  numberOfBook; // [!] Bu liste doğrudan DB'ye kaydedilmez, dikkat!
+  final List<NumberOfBook?> numberOfBook; // [!] Bu liste doğrudan DB'ye kaydedilmez, dikkat!
 
-  Library({
-    this.id,
-    required this.name,
-    required this.locationId,
-    this.location,
-    this.numberOfBook = const [],
-  });
+  Library({this.id, required this.name, required this.locationId, this.location, this.numberOfBook = const []});
 
   // [!] numberOfBook listesi bu metod içinde doldurulmaz!
   // [!] Veritabanından [Library] nesnesi çekildikten sonra <ayrı bir sorgu> ile [NumberOfBook] listesi çekilip manuel olarak atanır.
@@ -24,8 +17,7 @@ class Library {
       id: json['id'],
       name: json['name'],
       locationId: json['locationId'],
-      numberOfBook:
-          const [], // [!] {fromJson} sırasında liste <boş> olarak başlatılır, sonradan doldurulur.
+      numberOfBook: const [], // [!] {fromJson} sırasında liste <boş> olarak başlatılır, sonradan doldurulur.
     );
   }
 

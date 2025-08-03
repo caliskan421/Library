@@ -38,15 +38,13 @@ abstract class _HomeViewModel with Store {
   ObservableList<Book> allBooks = ObservableList<Book>();
 
   @observable
-  ObservableList<NumberOfBook> allNumberOfBooks =
-      ObservableList<NumberOfBook>();
+  ObservableList<NumberOfBook> allNumberOfBooks = ObservableList<NumberOfBook>();
 
   @observable
   ObservableList<Writer> allWriters = ObservableList<Writer>();
 
   @observable
-  ObservableList<LibraryLocation> allLibraryLocations =
-      ObservableList<LibraryLocation>();
+  ObservableList<LibraryLocation> allLibraryLocations = ObservableList<LibraryLocation>();
 
   // --> İlişkilendirme için
   @observable
@@ -96,8 +94,7 @@ abstract class _HomeViewModel with Store {
       // --> Service locator'dan repository'leri al
       _bookRepository = await ServiceHelper.bookRepository;
       _libraryRepository = await ServiceHelper.libraryRepository;
-      _libraryLocationRepository =
-          await ServiceHelper.libraryLocationRepository;
+      _libraryLocationRepository = await ServiceHelper.libraryLocationRepository;
       _numberOfBookRepository = await ServiceHelper.numberOfBookRepository;
       _writerRepository = await ServiceHelper.writerRepository;
 
@@ -118,15 +115,11 @@ abstract class _HomeViewModel with Store {
   Future<void> loadAllData() async {
     updateStatus('Veriler yükleniyor...');
     try {
-      final allLibrariesData = await _libraryRepository
-          .getAllWithLocations(); // --> Library: LocationInfo {appointed}
-      List<Library> librariesWithDetails =
-          []; // --> Library: NumberOfBook + LocationInfo {appointed}
+      final allLibrariesData = await _libraryRepository.getAllWithLocations(); // --> Library: LocationInfo {appointed}
+      List<Library> librariesWithDetails = []; // --> Library: NumberOfBook + LocationInfo {appointed}
 
       for (var lib in allLibrariesData) {
-        final detailedLibrary = await _libraryRepository.getLibraryWithBooks(
-          lib.id!,
-        );
+        final detailedLibrary = await _libraryRepository.getLibraryWithBooks(lib.id!);
         if (detailedLibrary != null) {
           librariesWithDetails.add(detailedLibrary);
         }
@@ -138,27 +131,19 @@ abstract class _HomeViewModel with Store {
       final allLibraryLocationsData = await _libraryLocationRepository.getAll();
 
       libraryWithBooks.clear();
-      libraryWithBooks.addAll(
-        librariesWithDetails,
-      ); // --> veriler [observable_list]'e atanir
+      libraryWithBooks.addAll(librariesWithDetails); // --> veriler [observable_list]'e atanir
 
       allBooks.clear();
       allBooks.addAll(allBooksData); // --> veriler [observable_list]'e atanir
 
       allNumberOfBooks.clear();
-      allNumberOfBooks.addAll(
-        allNumberOfBooksData,
-      ); // --> veriler [observable_list]'e atanir
+      allNumberOfBooks.addAll(allNumberOfBooksData); // --> veriler [observable_list]'e atanir
 
       allWriters.clear();
-      allWriters.addAll(
-        allWritersData,
-      ); // --> veriler [observable_list]'e atanir
+      allWriters.addAll(allWritersData); // --> veriler [observable_list]'e atanir
 
       allLibraryLocations.clear();
-      allLibraryLocations.addAll(
-        allLibraryLocationsData,
-      ); // --> veriler [observable_list]'e atanir
+      allLibraryLocations.addAll(allLibraryLocationsData); // --> veriler [observable_list]'e atanir
 
       updateStatus(
         'Veriler yüklendi. ${allLibrariesData.length} kütüphane, ${allBooksData.length} kitap, ${allWritersData.length} yazar, ${allLibraryLocationsData.length} konum',
@@ -186,17 +171,13 @@ abstract class _HomeViewModel with Store {
     log('-' * 40);
     for (var book in allBooks) {
       final writerName = book.writer?.name ?? 'Bilinmeyen Yazar';
-      log(
-        'ID: ${book.id} | ${book.name} - $writerName (${book.numberOfPages} sayfa)',
-      );
+      log('ID: ${book.id} | ${book.name} - $writerName (${book.numberOfPages} sayfa)');
     }
 
     log('\n🏛️ LIBRARIES (${libraryWithBooks.length} adet):');
     log('-' * 40);
     for (var library in libraryWithBooks) {
-      log(
-        'ID: ${library.id} | ${library.name} - ${library.location?.title ?? "Konum bilinmiyor"}',
-      );
+      log('ID: ${library.id} | ${library.name} - ${library.location?.title ?? "Konum bilinmiyor"}');
       for (var bookCount in library.numberOfBook) {
         if (bookCount != null) {
           log('  └─ ${bookCount.book.name}: ${bookCount.number} adet');
@@ -207,17 +188,13 @@ abstract class _HomeViewModel with Store {
     log('\n📍 LIBRARY_LOCATIONS (${allLibraryLocations.length} adet):');
     log('-' * 40);
     for (var location in allLibraryLocations) {
-      log(
-        'ID: ${location.id} | ${location.title} - Enlem: ${location.lat}, Boylam: ${location.long}',
-      );
+      log('ID: ${location.id} | ${location.title} - Enlem: ${location.lat}, Boylam: ${location.long}');
     }
 
     log('\n🔗 NUMBER_OF_BOOKS İLİŞKİLERİ (${allNumberOfBooks.length} adet):');
     log('-' * 40);
     for (var numberBook in allNumberOfBooks) {
-      log(
-        'ID: ${numberBook.id} | Kitap: ${numberBook.book.name} | Kütüphane ID: ${numberBook.libraryId} | Sayı: ${numberBook.number}',
-      );
+      log('ID: ${numberBook.id} | Kitap: ${numberBook.book.name} | Kütüphane ID: ${numberBook.libraryId} | Sayı: ${numberBook.number}');
     }
 
     log('\n${'=' * 60}\n');
@@ -232,9 +209,7 @@ abstract class _HomeViewModel with Store {
 
     try {
       // --> Aynı isimde yazar var mı kontrol et
-      final existingWriter = await _writerRepository.getByName(
-        writerNameController.text,
-      );
+      final existingWriter = await _writerRepository.getByName(writerNameController.text);
       if (existingWriter != null) {
         updateStatus('Bu isimde bir yazar zaten mevcut!');
         return;
@@ -291,8 +266,8 @@ abstract class _HomeViewModel with Store {
 
     try {
       // Lat ve Long değerlerini integer'a dönüştür
-      final lat = int.tryParse(locationLatController.text);
-      final long = int.tryParse(locationLongController.text);
+      final lat = double.tryParse(locationLatController.text);
+      final long = double.tryParse(locationLongController.text);
 
       if (lat == null || long == null) {
         updateStatus('Enlem ve Boylam değerleri sayı olmalı!');
@@ -300,22 +275,13 @@ abstract class _HomeViewModel with Store {
       }
 
       // Önce LibraryLocation oluştur
-      final libraryLocation = LibraryLocation(
-        title: locationTitleController.text,
-        lat: lat,
-        long: long,
-      );
+      final libraryLocation = LibraryLocation(title: locationTitleController.text, lat: lat, long: long);
 
-      final locationId = await _libraryLocationRepository.insert(
-        libraryLocation,
-      );
+      final locationId = await _libraryLocationRepository.insert(libraryLocation);
       updateStatus('Konum eklendi! ID: $locationId');
 
       // Sonra Library oluştur
-      final library = Library(
-        name: libraryNameController.text,
-        locationId: locationId,
-      );
+      final library = Library(name: libraryNameController.text, locationId: locationId);
 
       final libraryId = await _libraryRepository.insert(library);
       updateStatus('Kütüphane eklendi! ID: $libraryId');
@@ -346,11 +312,7 @@ abstract class _HomeViewModel with Store {
 
     try {
       final count = int.parse(bookCountController.text);
-      final numberOfBook = NumberOfBook(
-        book: selectedBookForLibrary!,
-        number: count,
-        libraryId: selectedLibraryForBook!.id,
-      );
+      final numberOfBook = NumberOfBook(book: selectedBookForLibrary!, number: count, libraryId: selectedLibraryForBook!.id);
 
       final id = await _numberOfBookRepository.insert(numberOfBook);
       updateStatus('Kitap kütüphaneye eklendi! ID: $id');
@@ -401,39 +363,18 @@ abstract class _HomeViewModel with Store {
       final writerId3 = await _writerRepository.insert(writer3);
 
       // Örnek konum bilgileri ekle
-      final location1 = LibraryLocation(
-        title: 'Beşiktaş Merkez Kütüphanesi',
-        lat: 41040000,
-        long: 29000000,
-      );
-      final location2 = LibraryLocation(
-        title: 'Kadıköy Şubesi',
-        lat: 40980000,
-        long: 29030000,
-      );
-      final location3 = LibraryLocation(
-        title: 'Sultanahmet Tarihi Kütüphanesi',
-        lat: 41010000,
-        long: 28980000,
-      );
+      final location1 = LibraryLocation(title: 'Beşiktaş Merkez Kütüphanesi', lat: 41040000, long: 29000000);
+      final location2 = LibraryLocation(title: 'Kadıköy Şubesi', lat: 40980000, long: 29030000);
+      final location3 = LibraryLocation(title: 'Sultanahmet Tarihi Kütüphanesi', lat: 41010000, long: 28980000);
 
       final locationId1 = await _libraryLocationRepository.insert(location1);
       final locationId2 = await _libraryLocationRepository.insert(location2);
       final locationId3 = await _libraryLocationRepository.insert(location3);
 
       // Örnek kütüphaneler ekle
-      final library1 = Library(
-        name: 'Beşiktaş Halk Kütüphanesi',
-        locationId: locationId1,
-      );
-      final library2 = Library(
-        name: 'Kadıköy Çok Amaçlı Kütüphane',
-        locationId: locationId2,
-      );
-      final library3 = Library(
-        name: 'Sultanahmet Araştırma Merkezi',
-        locationId: locationId3,
-      );
+      final library1 = Library(name: 'Beşiktaş Halk Kütüphanesi', locationId: locationId1);
+      final library2 = Library(name: 'Kadıköy Çok Amaçlı Kütüphane', locationId: locationId2);
+      final library3 = Library(name: 'Sultanahmet Araştırma Merkezi', locationId: locationId3);
 
       final libraryId1 = await _libraryRepository.insert(library1);
       final libraryId2 = await _libraryRepository.insert(library2);
@@ -441,21 +382,9 @@ abstract class _HomeViewModel with Store {
 
       // Örnek kitaplar ekle
       final book1 = Book(name: 'Kar', writerId: writerId1, numberOfPages: 464);
-      final book2 = Book(
-        name: '10 Minutes 38 Seconds in This Strange World',
-        writerId: writerId2,
-        numberOfPages: 320,
-      );
-      final book3 = Book(
-        name: 'İnce Memed',
-        writerId: writerId3,
-        numberOfPages: 432,
-      );
-      final book4 = Book(
-        name: 'Masumiyet Müzesi',
-        writerId: writerId1,
-        numberOfPages: 592,
-      );
+      final book2 = Book(name: '10 Minutes 38 Seconds in This Strange World', writerId: writerId2, numberOfPages: 320);
+      final book3 = Book(name: 'İnce Memed', writerId: writerId3, numberOfPages: 432);
+      final book4 = Book(name: 'Masumiyet Müzesi', writerId: writerId1, numberOfPages: 592);
 
       await _bookRepository.insert(book1);
       await _bookRepository.insert(book2);
@@ -463,24 +392,12 @@ abstract class _HomeViewModel with Store {
       await _bookRepository.insert(book4);
 
       // Kitap-Kütüphane ilişkileri ekle
-      await _numberOfBookRepository.insert(
-        NumberOfBook(book: book1, number: 5, libraryId: libraryId1),
-      );
-      await _numberOfBookRepository.insert(
-        NumberOfBook(book: book2, number: 3, libraryId: libraryId1),
-      );
-      await _numberOfBookRepository.insert(
-        NumberOfBook(book: book3, number: 7, libraryId: libraryId2),
-      );
-      await _numberOfBookRepository.insert(
-        NumberOfBook(book: book4, number: 2, libraryId: libraryId2),
-      );
-      await _numberOfBookRepository.insert(
-        NumberOfBook(book: book1, number: 4, libraryId: libraryId3),
-      );
-      await _numberOfBookRepository.insert(
-        NumberOfBook(book: book3, number: 6, libraryId: libraryId3),
-      );
+      await _numberOfBookRepository.insert(NumberOfBook(book: book1, number: 5, libraryId: libraryId1));
+      await _numberOfBookRepository.insert(NumberOfBook(book: book2, number: 3, libraryId: libraryId1));
+      await _numberOfBookRepository.insert(NumberOfBook(book: book3, number: 7, libraryId: libraryId2));
+      await _numberOfBookRepository.insert(NumberOfBook(book: book4, number: 2, libraryId: libraryId2));
+      await _numberOfBookRepository.insert(NumberOfBook(book: book1, number: 4, libraryId: libraryId3));
+      await _numberOfBookRepository.insert(NumberOfBook(book: book3, number: 6, libraryId: libraryId3));
 
       updateStatus('Örnek veriler başarıyla eklendi!');
       await loadAllData();

@@ -1,8 +1,8 @@
 class LibraryLocation {
   final int? id;
   final String title;
-  final int lat;
-  final int long;
+  final double lat;
+  final double long;
 
   LibraryLocation({
     this.id,
@@ -15,8 +15,8 @@ class LibraryLocation {
     return LibraryLocation(
       id: json['id'],
       title: json['title'],
-      lat: json['lat'],
-      long: json['long'],
+      lat: (json['lat'] as num).toDouble(),
+      long: (json['long'] as num).toDouble(),
     );
   }
 
@@ -28,7 +28,7 @@ class LibraryLocation {
     CREATE TABLE library_locations (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       title TEXT,
-      lat INTEGER,
-      long INTEGER)
+      lat REAL,
+      long REAL)
   """;
 }
