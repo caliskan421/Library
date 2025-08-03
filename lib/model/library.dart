@@ -8,29 +8,20 @@ class Library {
 
   Library({this.id, required this.name, required this.location, this.numberOfBook = const []});
 
-  // [!] numberOfBook listesi bu metod içinde doldurulmaz.
-  // [!] Veritabanından Library nesnesi çekildikten sonra ayrı bir sorgu ile NumberOfBook listesi çekilip manuel olarak atanır.
+  // [!] numberOfBook listesi bu metod içinde doldurulmaz!
+  // [!] Veritabanından [Library] nesnesi çekildikten sonra <ayrı bir sorgu> ile [NumberOfBook] listesi çekilip manuel olarak atanır.
   factory Library.fromJson(Map<String, dynamic> json) {
     return Library(
       id: json['id'],
       name: json['name'],
       location: json['location'],
-      numberOfBook: const [], // [!] fromJson sırasında liste boş olarak başlatılır, sonradan doldurulur.
+      numberOfBook: const [], // [!] {fromJson} sırasında liste <boş> olarak başlatılır, sonradan doldurulur.
     );
   }
 
-  // [!] numberOfBook listesi bu Map'e dahil edilmez, çünkü doğrudan DB'ye kaydedilmez.
+  // [!] numberOfBook listesi bu Map'e <dahil edilmez>, çünkü doğrudan DB'ye kaydedilmez.
   Map<String, dynamic> toJson() {
     return {'id': id, 'name': name, 'location': location};
-  }
-
-  Library copyWith({int? id, String? name, String? location, List<NumberOfBook?>? numberOfBook}) {
-    return Library(
-      id: id ?? this.id, // Eğer yeni bir ID verilmezse, mevcut ID'yi kullan
-      name: name ?? this.name,
-      location: location ?? this.location,
-      numberOfBook: numberOfBook ?? this.numberOfBook, // Eğer yeni bir liste verilmezse, mevcut listeyi kullan
-    );
   }
 
   static final createTable = """

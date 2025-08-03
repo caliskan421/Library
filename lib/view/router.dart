@@ -1,7 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:where_is_library/view/home/home_view.dart';
 
-enum RoutePages { home }
+enum RouteNames { home }
 
 final router = GoRouter(
   initialLocation: '/',

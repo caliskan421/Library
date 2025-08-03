@@ -6,7 +6,8 @@ import 'dart:convert';
 typedef JsonMap = Map<String, dynamic>;
 
 extension SharedPreferencesJsonExt on SharedPreferences {
-  Future<bool> setJson(String key, JsonMap map) => setString(key, jsonEncode(map));
+  Future<bool> setJson(String key, JsonMap map) =>
+      setString(key, jsonEncode(map));
 
   JsonMap? getJson(String key) {
     final raw = getString(key);
@@ -23,34 +24,40 @@ class SharedPreferencesManager implements BasePreferences {
   /* ---------- BasePreferences implementasyonu ---------- */
 
   @override
-  Future<bool> setString(String key, String value) => _wrap(() => _prefs.setString(key, value));
+  Future<bool> setString(String key, String value) =>
+      _wrap(() => _prefs.setString(key, value));
 
   @override
   Future<String?> getString(String key) => Future.value(_prefs.getString(key));
 
   @override
-  Future<bool> setInt(String key, int value) => _wrap(() => _prefs.setInt(key, value));
+  Future<bool> setInt(String key, int value) =>
+      _wrap(() => _prefs.setInt(key, value));
 
   @override
   Future<int?> getInt(String key) => Future.value(_prefs.getInt(key));
 
   @override
-  Future<bool> setDouble(String key, double value) => _wrap(() => _prefs.setDouble(key, value));
+  Future<bool> setDouble(String key, double value) =>
+      _wrap(() => _prefs.setDouble(key, value));
 
   @override
   Future<double?> getDouble(String key) => Future.value(_prefs.getDouble(key));
 
   @override
-  Future<bool> setBool(String key, bool value) => _wrap(() => _prefs.setBool(key, value));
+  Future<bool> setBool(String key, bool value) =>
+      _wrap(() => _prefs.setBool(key, value));
 
   @override
   Future<bool?> getBool(String key) => Future.value(_prefs.getBool(key));
 
   @override
-  Future<bool> setStringList(String key, List<String> value) => _wrap(() => _prefs.setStringList(key, value));
+  Future<bool> setStringList(String key, List<String> value) =>
+      _wrap(() => _prefs.setStringList(key, value));
 
   @override
-  Future<List<String>?> getStringList(String key) => Future.value(_prefs.getStringList(key));
+  Future<List<String>?> getStringList(String key) =>
+      Future.value(_prefs.getStringList(key));
 
   @override
   Future<bool> remove(String key) => _wrap(() => _prefs.remove(key));
@@ -64,7 +71,8 @@ class SharedPreferencesManager implements BasePreferences {
   /* ---------- Yardımcılar ---------- */
 
   @override
-  void logError(String msg, Object error, [StackTrace? st]) => dev.log('SharedPrefs ❌ $msg', level: 1000, error: error, stackTrace: st);
+  void logError(String msg, Object error, [StackTrace? st]) =>
+      dev.log('SharedPrefs ❌ $msg', level: 1000, error: error, stackTrace: st);
 
   Future<T> _wrap<T>(Future<T> Function() fn) async {
     try {

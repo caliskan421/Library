@@ -1,44 +1,30 @@
+import 'package:where_is_library/model/writer.dart';
+
 class Book {
-  final String
-  name; // [!] nullable -> db'ye kaydetmeden önce oluşturacağımız nesnede null iken db içinde atanacak
-  final int? id;
-  final String writer;
+  final int? id; // [!] nullable -> db'ye kaydetmeden önce oluşturacağımız nesnede null iken db içinde atanacak
+  final String name;
   final int? numberOfPages;
+  final Writer? writer;
+  final int? writerId;
 
-  Book({this.id, required this.name, required this.writer, this.numberOfPages});
+  Book({this.id, required this.name, this.numberOfPages, this.writer, this.writerId});
 
+  // [!] Burada [writer] nesnesini doğrudan {fromJson} içinde oluşturmuyoruz!
+  // [!] Book çekildiğinde, writer nesnesi {JOIN} ile çekilir.
   factory Book.fromJson(Map<String, dynamic> map) {
-    return Book(
-      id: map['id'],
-      name: map['name'],
-      writer: map['writer'],
-      numberOfPages: map['numberOfPages'],
-    );
+    return Book(id: map['id'], name: map['name'], numberOfPages: map['numberOfPages'], writerId: map['writerId']);
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'writer': writer,
-      'numberOfPages': numberOfPages,
-    };
-  }
-
-  Book copyWith({int? id, String? name, String? writer, int? numberOfPages}) {
-    return Book(
-      id: id ?? this.id, // Eğer yeni bir ID verilmezse, mevcut ID'yi kullan
-      name: name ?? this.name,
-      writer: writer ?? this.writer,
-      numberOfPages: numberOfPages ?? this.numberOfPages,
-    );
+    return {'id': id, 'name': name, 'numberOfPages': numberOfPages, 'writerId': writer?.id ?? writerId};
   }
 
   static final createTable = """
     CREATE TABLE books (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT,
-      writer TEXT,
-      numberOfPages INTEGER)
+      name TEXT NOT NULL,
+      writerId INTEGER,
+      numberOfPages INTEGER,
+      FOREIGN KEY (writerId) REFERENCES writers (id) ON DELETE SET NULL)
   """;
 }

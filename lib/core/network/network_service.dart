@@ -1,8 +1,6 @@
 import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
-
 import '../preferences/secure_storage_manager.dart';
 import '../preferences/shared_preferences_manager.dart';
 
@@ -27,13 +25,13 @@ class ApiResponse<T> {
 }
 
 ///
-class NetworkManagement {
+class NetworkService {
   final Dio _dio;
   static const String _baseUrl = 'https://osmanlica.online/api';
   final SecureStorageManager _secureStorage;
   final SharedPreferencesManager _sharedPreferences;
 
-  NetworkManagement(this._dio)
+  NetworkService(this._dio)
     : _secureStorage = GetIt.instance<SecureStorageManager>(),
       _sharedPreferences = GetIt.instance<SharedPreferencesManager>() {
     _configureBaseOptions();
